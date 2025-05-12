@@ -35,20 +35,21 @@ export async function getJudgeProfile(userData: User | null) {
 }
 
 export async function getAllScores() {
-  const { data, error } = await supabase
-    .from('scores')
-    .select(`
-      *,
-      judges (name),
-      parameters (name)
-    `);
+  try {
+    const { data, error } = await supabase
+      .from('scores')
+      .select('*');
 
-  if (error) {
-    console.error('Error fetching all scores:', error);
+    if (error) {
+      console.error('Error fetching all scores:', error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Error in getAllScores:', error);
     return null;
   }
-
-  return data;
 }
 
 export async function getAdminParameters() {

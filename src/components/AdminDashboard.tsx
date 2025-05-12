@@ -13,28 +13,39 @@ interface AggregateScore {
 const AdminDashboard: React.FC = () => {
   const [aggregateScores, setAggregateScores] = useState<AggregateScore[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchScores = async () => {
-      const scores = await getAllScores();
-      if (!scores) return;
+      try {
+        const scores = await getAllScores();
+        if (!scores) {
+          setError('Failed to fetch scores');
+          setLoading(false);
+          return;
+        }
 
-      const scoresByTeam = teams.map(team => {
-        const teamScores = scores.filter(score => score.team_id === team.id);
-        const uniqueJudges = new Set(teamScores.map(score => score.judge_id));
-        const totalScore = teamScores.reduce((sum, score) => sum + score.score, 0);
-        const averageScore = totalScore / (teamScores.length || 1);
+        const scoresByTeam = teams.map(team => {
+          const teamScores = scores.filter(score => score.team_id === team.id);
+          const uniqueJudges = new Set(teamScores.map(score => score.judge_id));
+          const totalScore = teamScores.reduce((sum, score) => sum + score.score, 0);
+          const averageScore = totalScore / (teamScores.length || 1);
 
-        return {
-          teamId: team.id,
-          teamName: team.name,
-          averageScore: Number(averageScore.toFixed(2)),
-          totalJudges: uniqueJudges.size
-        };
-      });
+          return {
+            teamId: team.id,
+            teamName: team.name,
+            averageScore: Number(averageScore.toFixed(2)),
+            totalJudges: uniqueJudges.size
+          };
+        });
 
-      setAggregateScores(scoresByTeam.sort((a, b) => b.averageScore - a.averageScore));
-      setLoading(false);
+        setAggregateScores(scoresByTeam.sort((a, b) => b.averageScore - a.averageScore));
+      } catch (err) {
+        setError('An error occurred while processing scores');
+        console.error('Error in fetchScores:', err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchScores();
@@ -44,6 +55,14 @@ const AdminDashboard: React.FC = () => {
     return (
       <div className="flex items-center justify-center py-12">
         <div className="text-primary text-lg">Loading scores...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-red-600 text-lg">{error}</div>
       </div>
     );
   }
@@ -88,4 +107,4 @@ const AdminDashboard: React.FC = () => {
   );
 };
 
-export default AdminDashboard
+export default AdminDashboard;
