@@ -10,7 +10,12 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ resetScores, judgeName, isAdmin }) => {
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
+    if (!error) {
+    window.location.reload(); // Forces a full page refresh
+  } else {
+    console.error('Logout error:', error.message);
+  }
   };
 
   return (
