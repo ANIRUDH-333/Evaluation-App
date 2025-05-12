@@ -19,12 +19,12 @@ const Header: React.FC<HeaderProps> = ({ resetScores, judgeName, isAdmin }) => {
         <div className="flex items-center">
           {/* <ClipboardCheck className="h-8 w-8 text-accent-yellow mr-3" /> */}
           <img
-            src="Gw.png" // Update this path to your image file
+            src="/Gw.png"
             alt="Custom Icon"
             className="h-8 w-8 mr-3"
           />
           <div>
-            <h1 className="text-xl md:text-2xl font-bold text-content-light">Team Evaluation</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-content-light">DevSummit Demo Jam Evaluation</h1>
             <p className="text-sm text-primary-light">
               {isAdmin ? 'Admin' : 'Judge'}: {judgeName}
             </p>
