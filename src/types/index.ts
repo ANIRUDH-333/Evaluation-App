@@ -23,3 +23,9 @@ export interface Score {
 
 // Record<judgeId, Record<teamId, Record<parameterId, score>>>
 export type Scores = Record<string, Record<string, Record<string, number | null>>>;
+
+export interface AggregateScore {
+  teamName: string;
+  judgeName: string;
+  scores: Record<string, number | null>; // parameter name to score mapping
+}

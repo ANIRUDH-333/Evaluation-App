@@ -1,14 +1,10 @@
 import { Parameter } from '../types';
 
 export const parameters: Parameter[] = [
-  { id: 1, name: 'Technical Implementation', description: 'Quality of code and technical solutions' },
-  { id: 2, name: 'User Interface', description: 'Visual appeal and usability of the interface' },
-  { id: 3, name: 'Innovation', description: 'Originality and creative approach to problem-solving' },
-  { id: 4, name: 'Functionality', description: 'How well the solution addresses requirements' },
-  { id: 5, name: 'Performance', description: 'Speed and efficiency of the solution' },
-  { id: 6, name: 'Scalability', description: 'Ability to handle growth and increased load' },
-  { id: 7, name: 'Documentation', description: 'Quality and completeness of documentation' },
-  { id: 8, name: 'Collaboration', description: 'Evidence of effective teamwork' },
-  { id: 9, name: 'Presentation', description: 'Clarity and quality of the presentation' },
-  { id: 10, name: 'Overall Impact', description: 'Lasting impression and potential value' },
+  { id: 1, name: 'Requirement Understanding', description: 'How well did the team grasp and interpret the problem statement? Did they clearly understand the business context and technical challenges?' },
+  { id: 2, name: 'Solution Excellence', description: 'How robust, scalable, and effective is their solution? Does it address the core objectives comprehensively with sound technical design?' },
+  { id: 3, name: 'Innovation Quotient', description: 'How novel and forward-thinking is the approach? Did the team go beyond the obvious and introduce fresh ideas or unique implementations?' },
+  { id: 4, name: 'Creativity & User Experience', description: 'How creatively did they bring their solution to life? Is the user experience intuitive, engaging, and thoughtfully designed?' },
+  { id: 5, name: 'Presentation & Demonstration', description: 'How clearly and confidently did the team communicate their idea? Was the demo smooth, insightful, and impactful?' },
+  { id: 6, name: 'Decibel Meter', description: '' },
 ];

@@ -24,6 +24,7 @@ const ParameterCard: React.FC<ParameterCardProps> = ({ parameter, score, onChang
           </label>
           <select
             id={`score-${parameter.id}`}
+            disabled={parameter.id === 6}
             value={score === null ? '' : score}
             onChange={(e) => onChange(e.target.value ? Number(e.target.value) : null)}
             className={`rounded-md border border-primary/20 py-2 px-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 ${
