@@ -8,6 +8,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Auth from './components/Auth';
 import { supabase, getJudgeProfile, type Judge } from './lib/supabase';
+import { User } from '@supabase/supabase-js';
 
 function App() {
   const [activeTeamId, setActiveTeamId] = useState(teams[0].id);
@@ -15,55 +16,67 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isScoresLoading, setIsScoresLoading] = useState(false);
   const [judge, setJudge] = useState<Judge | null>(null);
+  const [user_, setUser] = useState<User | null>(null);;
+  const [isSessionChecked, setIsSessionChecked] = useState(false);
+
 
   const checkSession = async () => {
-    try {
-      // First check if we have a session
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        // No session found, clear state and exit loading
-        setJudge(null);
-        return;
-      }
-      
-      // We have a session, try to get the judge profile
-      const judge = await getJudgeProfile();
-      setJudge(judge);
-    } catch (error) {
-      console.error('Error checking session:', error);
+  try {
+    // Wait for the initial session restoration
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    setUser(session?.user ?? null);
+
+    if (!session) {
+      console.log('No session found on initial load.');
       setJudge(null);
-    } finally {
       setIsLoading(false);
+      return;
     }
-  };
+
+    // Get the judge profile
+    const judge = await getJudgeProfile(session.user);
+    setJudge(judge);
+  } catch (error) {
+    console.error('Error checking session:', error);
+    setJudge(null);
+  } finally {
+    setIsLoading(false);
+    setIsSessionChecked(true);
+  }
+};
+
 
   useEffect(() => {
     checkSession();
-  
-      // Set up auth state listener
-  const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-    console.log('Auth state changed:', event);
+
+  // Set up auth state listener
+  // const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+  //   console.log('Auth state changed:', event);
     
-    if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
-      if (session) {
-        try {
-          const judge = await getJudgeProfile();
-          setJudge(judge);
-        } catch (error) {
-          console.error('Error getting judge profile:', error);
-          setJudge(null);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    } else if (event === 'SIGNED_OUT') {
-      setJudge(null);
-      setIsLoading(false);
-    }
-  });
+  //   if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION' || event === 'TOKEN_REFRESHED') {
+  //     if (session) {
+  //       try {
+  //         setUser(session.user)
+  //         // Then get the user from the session
+  //         const judge = await getJudgeProfile(user_);
+  //         setJudge(judge);
+  //       } catch (error) {
+  //         console.error('Error getting judge profile:', error);
+  //         setJudge(null);
+  //       } finally {
+  //         setIsLoading(false);
+  //       }
+  //     }
+  //   } else if (event === 'SIGNED_OUT') {
+  //     setJudge(null);
+  //     setIsLoading(false);
+  //   }
+  // });
   
-  return () => subscription.unsubscribe();
+  // return () => subscription.unsubscribe();
 }, []);
 
   const fetchScores = async () => {
@@ -159,6 +172,14 @@ function App() {
       }
     }
   }, [judge]);
+
+  if (!isSessionChecked) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-primary-dark/5">
+      <div className="text-primary text-lg">Checking session...</div>
+    </div>
+  );
+}
 
   if (isLoading) {
     return (
