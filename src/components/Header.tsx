@@ -45,3 +45,5 @@ const Header: React.FC<HeaderProps> = ({ resetScores, judgeName, isAdmin }) => {
     </header>
   );
 };
+
+export default Header
