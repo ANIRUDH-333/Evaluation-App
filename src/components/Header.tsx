@@ -24,7 +24,9 @@ const Header: React.FC<HeaderProps> = ({ resetScores, judgeName, isAdmin }) => {
             className="h-8 w-8 mr-3"
           />
           <div>
-            <h1 className="text-xl md:text-2xl font-bold text-content-light">DevSummit Demo Jam Evaluation</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-content-light">
+              Dev<span className="text-accent-yellow">Summit</span> Demo Jam Evaluation
+            </h1>
             <p className="text-sm text-primary-light">
               {isAdmin ? 'Admin' : 'Judge'}: {judgeName}
             </p>
